@@ -1,0 +1,128 @@
+{
+  "wpPassword": "secure",
+  "wpUsername": "admin",
+  "useOsLanguage": true,
+  "language": "en",
+  "useOsTimeZone": true,
+  "timeZone": "",
+  "timeZoneOffset": 1,
+  "useOsTheme": true,
+  "theme": "dark",
+  "projectPath": "/Users/user/DevKinsta",
+  "isCloseToTray": true,
+  "appUpdater": {
+    "isAutoEnabled": true,
+    "status": "noNewVersion",
+    "latestCheck": "2021-10-07T11:30:25.141Z",
+    "downloadProgress": {
+      "total": 90117364,
+      "delta": 1762918,
+      "transferred": 90117364,
+      "percent": 100,
+      "bytesPerSecond": 1398600
+    }
+  },
+  "os": {
+    "type": "darwin",
+    "isWindows": false,
+    "isLinux": false,
+    "isDarwinIntel": false,
+    "isDarwinM1": true
+  },
+  "osDefaultTheme": "dark",
+  "__internal__": {
+    "migrations": {
+      "version": "2.2.0"
+    }
+  },
+  "services": {
+    "host": "127.0.0.1",
+    "mariadb": {
+      "containerId": "devkinsta_db",
+      "name": "devkinsta_db",
+      "port": 15101,
+      "user": "root",
+      "password": "7zYloMcnGWW7qzQm"
+    },
+    "adminer": {
+      "containerId": "devkinsta_adminer",
+      "name": "devkinsta_adminer",
+      "port": "15200"
+    },
+    "mailhog": {
+      "containerId": "devkinsta_mailhog",
+      "name": "devkinsta_mailhog",
+      "port": "15400"
+    },
+    "nginx": {
+      "containerId": "devkinsta_nginx",
+      "name": "devkinsta_nginx",
+      "kinstaFolder": "/Users/user/DevKinsta/kinsta",
+      "publicFolder": "/Users/user/DevKinsta/public",
+      "privateFolder": "/Users/user/DevKinsta/private",
+      "logsFolder": "/Users/user/DevKinsta/logs"
+    },
+    "fpm": {
+      "containerId": "devkinsta_fpm",
+      "name": "devkinsta_fpm",
+      "publicFolder": "/Users/user/DevKinsta/public",
+      "privateFolder": "/Users/user/DevKinsta/private",
+      "logsFolder": "/Users/user/DevKinsta/logs"
+    }
+  },
+  "sites": [
+    {
+      "id": "5cca4367-ddef-44a9-860d-c27db71ec82c",
+      "status": "running",
+      "name": "website",
+      "slug": "website",
+      "size": 52986975,
+      "path": "/Users/user/DevKinsta/public/website",
+      "url": "website.local",
+      "framework": {
+        "type": "wp",
+        "version": "5.8.1",
+        "multiSite": false,
+        "multiSiteType": "directory",
+        "config": {
+          "WP_DEBUG": "false",
+          "DB_PASSWORD": "7zYloMcnGWW7qzQm"
+        },
+        "meta": {
+          "isMultisite": false,
+          "title": "website",
+          "wpUsername": "admin",
+          "wpPassword": "secure",
+          "wpEmail": "info@website.local"
+        }
+      },
+      "webserver": {
+        "status": "running",
+        "type": "nginx"
+      },
+      "web": {
+        "status": "running",
+        "type": "php",
+        "version": "7.4"
+      },
+      "database": {
+        "status": "running",
+        "name": "website",
+        "size": 655360
+      },
+      "hostFile": {
+        "status": "running"
+      },
+      "ssl": {
+        "status": "exited",
+        "isEnabled": true
+      },
+      "thumbnail": {
+        "status": "running",
+        "path": "/Users/user/Library/Application Support/DevKinsta/static/img/sites/5cca4367-ddef-44a9-860d-c27db71ec82c.png",
+        "hash": "1633606329412"
+      },
+      "runningAction": null
+    }
+  ]
+}

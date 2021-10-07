@@ -1,0 +1,22 @@
+#!/usr/bin/env php
+<?php
+
+namespace DevKinsta\CLI;
+
+use Symfony\Component\Console\Application;
+use DevKinsta\CLI\Helpers\CommandsHelper;
+
+define('DEV_KINSTA_CLI_START', microtime(true));
+define('DEV_KINSTA_CLI_ROOT_DIR', __DIR__.DIRECTORY_SEPARATOR);
+
+require __DIR__.'/vendor/autoload.php';
+
+$devKinstaCLI = new Application();
+
+$commands = CommandsHelper::getAvailableCommands();
+foreach ($commands as $command) {
+    $devKinstaCLI->add(new $command());
+}
+
+
+$devKinstaCLI->run();

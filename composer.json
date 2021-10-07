@@ -1,0 +1,28 @@
+{
+  "name": "nem-c/devkinsta-cli",
+  "description": "DevKinsta-CLI framework",
+  "type": "project",
+  "require": {
+    "ext-json": "*",
+    "symfony/console": "^5.3",
+    "symfony/process": "^5.3",
+    "symfony/filesystem": "^5.3",
+    "dflydev/dot-access-data": "^3.0",
+    "hanneskod/classtools": "^1.2",
+    "tivie/php-os-detector": "^1.1",
+    "magicalex/write-ini-file": "^2.0"
+  },
+  "license": "MIT",
+  "autoload": {
+    "classmap": [
+      "src/"
+    ]
+  },
+  "authors": [
+    {
+      "name": "Nemanja Cimbaljevic",
+      "email": "zion.trooper@gmail.com"
+    }
+  ],
+  "minimum-stability": "stable"
+}
