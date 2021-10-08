@@ -10,18 +10,15 @@ resources.
 
 ### During development supported on OSX only
 
-Commands groups and options:
+```
+Available commands:
+container
+  container:restart  Restart docker container
 
-#### Container
+php
+  php:memory-limit   Set memory_limit value for all PHP versions
 
-`container:restart [name]` restart container name by docker name
-
-#### Kinsta
-
-`sites:rebuild` recreates /kinsta/sites.ini file in case it gets damaged
-
-`sites:list` list all sites available in sites.ini
-
-#### PHP
-
-`php:memory-limit` changes memory limit on php-fpm for all PHP versions
+sites
+  sites:list         List all sites available in sites.ini
+  sites:rebuild      Rebuild sites.ini based on sites in config.json
+```
