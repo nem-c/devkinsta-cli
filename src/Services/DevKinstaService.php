@@ -66,7 +66,7 @@ class DevKinstaService
     {
         $fileSystem = new Filesystem();
 
-        $backupDir = self::getConfigItem('projectPath').DIRECTORY_SEPARATOR.'devkinsta-cli'.DIRECTORY_SEPARATOR.'backups'.DIRECTORY_SEPARATOR;
+        $backupDir = self::getConfigItem('projectPath').DIRECTORY_SEPARATOR.'private'.DIRECTORY_SEPARATOR.'.devkinsta-cli'.DIRECTORY_SEPARATOR;
         $fileSystem->mkdir($backupDir);
 
         return $backupDir;

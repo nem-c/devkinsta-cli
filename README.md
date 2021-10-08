@@ -2,6 +2,12 @@
 
 Adds missing functionality and options to DevKinsta application.
 
+Keep in mind that using any of this commands might break your setup. This project is not related with Kinsta in any way,
+and there are no guarantees about end-result.
+
+Me, as developer, try to test and foresee any issues and prevent them programatically, but this takes time and
+resources.
+
 ### During development supported on OSX only
 
 Commands groups and options:
@@ -12,7 +18,9 @@ Commands groups and options:
 
 #### Kinsta
 
-`kinsta:rebuild-sites-ini` recreates /kinsta/sites.ini file in case it gets damaged
+`sites:rebuild` recreates /kinsta/sites.ini file in case it gets damaged
+
+`sites:list` list all sites available in sites.ini
 
 #### PHP
 

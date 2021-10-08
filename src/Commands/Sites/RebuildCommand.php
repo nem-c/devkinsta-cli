@@ -3,6 +3,7 @@
 namespace DevKinsta\CLI\Commands\Kinsta;
 
 use DevKinsta\CLI\Services\DevKinstaService;
+use DevKinsta\CLI\Traits\SitesTrait;
 use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -15,14 +16,16 @@ use WriteiniFile\WriteiniFile;
 /**
  * @class RebuildSitesIniCommand
  */
-class RebuildSitesIniCommand extends Command
+class RebuildCommand extends Command
 {
+    use SitesTrait;
+
     /**
      * Command name.
      *
      * @var string
      */
-    protected static $defaultName = 'kinsta:rebuild-sites-ini';
+    protected static $defaultName = 'sites:rebuild';
 
     /**
      * Command description.
@@ -30,23 +33,6 @@ class RebuildSitesIniCommand extends Command
      * @var string
      */
     protected static $defaultDescription = 'Rebuild sites.ini based on sites in config.json';
-
-    /**
-     * DevKinstaService instance.
-     *
-     * @var DevKinstaService
-     */
-    protected $devkinsta;
-
-    /**
-     * Constructor.
-     *
-     * @param  string|null  $name
-     */
-    public function __construct(string $name = null)
-    {
-        parent::__construct($name);
-    }
 
     /**
      * Execute container:restart command.
@@ -106,19 +92,12 @@ class RebuildSitesIniCommand extends Command
         $fileSystem = new Filesystem();
         $backupTime = time();
 
-        $backupDir        = DevKinstaService::getBackupDirPath().'kinsta'.DIRECTORY_SEPARATOR;
+        $backupDir        = DevKinstaService::getBackupDirPath();
         $backupConfigPath = $backupDir.'sites.ini.'.$backupTime;
 
         $fileSystem->mkdir($backupDir);
 
         $fileSystem->copy($this->getCurrentSitesConfigPath(), $backupConfigPath);
         $output->writeln('Backup of sites.ini file available at '.$backupConfigPath);
-    }
-
-    private function getCurrentSitesConfigPath(): string
-    {
-        $sitesPath = DevKinstaService::getConfigItem('projectPath');
-
-        return $sitesPath.DIRECTORY_SEPARATOR.'kinsta'.DIRECTORY_SEPARATOR.'sites.ini';
     }
 }
