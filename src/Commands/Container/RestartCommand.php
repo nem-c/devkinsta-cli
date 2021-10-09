@@ -88,6 +88,8 @@ class RestartCommand extends Command
             return Command::FAILURE;
         }
 
+        $output->write(sprintf('Restarting container "%s"...', $container_name));
+
         $process = new Process(array($this->docker->getDockerExecPath(), 'restart', $container_name));
         $process->run();
 
@@ -96,7 +98,7 @@ class RestartCommand extends Command
         }
 
         if ($container_name === strtolower(trim($process->getOutput()))) {
-            $output->writeln(sprintf('Container "%s" has been restarted', $container_name));
+            $output->writeln(' DONE!');
         }
 
         return Command::SUCCESS;

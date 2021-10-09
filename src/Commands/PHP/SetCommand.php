@@ -2,18 +2,18 @@
 
 namespace DevKinsta\CLI\Commands\PHP;
 
+use DevKinsta\CLI\Services\DevKinstaService;
 use DevKinsta\CLI\Traits\DevKinstaPHPTrait;
 use Exception;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @class MemoryLimitCommand
+ * @class SetCommand
  */
-class MemoryLimitCommand extends Command
+class SetCommand extends Command
 {
     use DevKinstaPHPTrait;
 
@@ -22,14 +22,14 @@ class MemoryLimitCommand extends Command
      *
      * @var string
      */
-    protected static $defaultName = 'php:memory-limit';
+    protected static $defaultName = 'php:set';
 
     /**
      * Command description.
      *
      * @var string
      */
-    protected static $defaultDescription = 'Set memory_limit value for all PHP versions';
+    protected static $defaultDescription = 'Set php ini to given value for all PHP versions';
 
     /**
      * Configure command arguments.
@@ -37,9 +37,15 @@ class MemoryLimitCommand extends Command
     protected function configure(): void
     {
         $this->addArgument(
+            'variable',
+            InputArgument::REQUIRED,
+            'Setting value for variable.'
+        );
+
+        $this->addArgument(
             'value',
             InputArgument::REQUIRED,
-            'New value to use for memory_limit. Should be in [int][M|G] format.'
+            'New value to use for variable.'
         );
     }
 
@@ -54,13 +60,18 @@ class MemoryLimitCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $phpSetCommand     = $this->getApplication()->find('php:set');
-        $phpSetCommandArgs = new ArrayInput(array(
-            'variable' => 'memory_limit',
-            'value'    => strtolower(trim($input->getArgument('value'))),
-        ));
+        $phpVariableToUpdate = strtolower(trim($input->getArgument('variable')));
+        $phpValueToUpdate    = strtolower(trim($input->getArgument('value')));
 
-        $phpSetCommand->run($phpSetCommandArgs, $output);
+        $output->write('Exporting current php.ini files...');
+        $this->exportPHPConfigurations();
+        $output->writeln(' DONE!');
+
+        foreach ($this->getSupportedPHPVersions() as $supportedPhpVersion) {
+            foreach ($this->getSupportedPHPModes() as $supportedPhpMode) {
+                DevKinstaService::getLocalDirPath();
+            }
+        }
 
         return Command::SUCCESS;
     }

@@ -92,7 +92,7 @@ class RebuildCommand extends Command
         $fileSystem = new Filesystem();
         $backupTime = time();
 
-        $backupDir        = DevKinstaService::getBackupDirPath();
+        $backupDir        = DevKinstaService::getLocalDirPath();
         $backupConfigPath = $backupDir.'sites.ini.'.$backupTime;
 
         $fileSystem->mkdir($backupDir);

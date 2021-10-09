@@ -62,7 +62,7 @@ class DevKinstaService
         return $service->data->get($configItem);
     }
 
-    public static function getBackupDirPath(): string
+    public static function getLocalDirPath(): string
     {
         $fileSystem = new Filesystem();
 
