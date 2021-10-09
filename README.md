@@ -12,13 +12,15 @@ resources.
 
 ```
 Available commands:
+
 container
-  container:restart  Restart docker container
-
+    container:restart   Restart docker container
+    
 php
-  php:memory-limit   Set memory_limit value for all PHP versions
-
+    php:memory-limit    Set memory_limit value for all PHP versions
+    php:set             Set php ini to given value for all PHP versions
+    
 sites
-  sites:list         List all sites available in sites.ini
-  sites:rebuild      Rebuild sites.ini based on sites in config.json
+    sites:list          List all sites available in sites.ini
+    sites:rebuild       Rebuild sites.ini based on sites in config.json
 ```
