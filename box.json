@@ -1,0 +1,20 @@
+{
+  "main": "devkinsta-cli.php",
+  "output": "bin/devkinsta-cli.phar",
+  "chmod": "0755",
+  "directories": [
+    "src"
+  ],
+  "files": [
+    "LICENSE.md",
+    "README.md"
+  ],
+  "finder": [
+    {
+      "name": "*",
+      "exclude": [],
+      "in": "vendor"
+    }
+  ],
+  "stub": true
+}

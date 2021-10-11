@@ -1,6 +1,6 @@
 <?php
 
-namespace DevKinsta\CLI\Commands\Kinsta;
+namespace DevKinsta\CLI\Commands\Sites;
 
 use DevKinsta\CLI\Services\DevKinstaService;
 use DevKinsta\CLI\Traits\SitesTrait;

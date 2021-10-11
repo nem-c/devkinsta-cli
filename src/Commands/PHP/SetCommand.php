@@ -136,6 +136,7 @@ class SetCommand extends Command
      * @param  string  $iniPath
      * @param  string  $variable
      * @param  string  $value
+     * @param  OutputInterface|null  $output
      *
      * @throws Exception
      */

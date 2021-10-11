@@ -14,7 +14,7 @@ resources.
 Available commands:
 
 container
-    container:restart   Restart docker container
+    container:restart           Restart docker container
     
 php
     php:max-file-upload-size    Set post_max_size and upload_max_filesize value for all PHP versions
