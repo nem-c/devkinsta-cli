@@ -59,6 +59,22 @@ class SetCommand extends Command
             'PHP Mode to update PHP setting for',
             'fpm'
         );
+
+        $this->addOption(
+            'skip-export',
+            null,
+            InputOption::VALUE_REQUIRED,
+            'Export files before updating',
+            false
+        );
+
+        $this->addOption(
+            'skip-container-restart',
+            null,
+            InputOption::VALUE_REQUIRED,
+            'Restart container after updating value.',
+            false
+        );
     }
 
     /**
@@ -72,15 +88,19 @@ class SetCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $phpVariableToUpdate = trim($input->getArgument('variable'));
-        $phpValueToUpdate    = trim($input->getArgument('value'));
-        $phpMode             = trim($input->getOption('mode'));
+        $phpVariableToUpdate  = trim($input->getArgument('variable'));
+        $phpValueToUpdate     = trim($input->getArgument('value'));
+        $phpMode              = trim($input->getOption('mode'));
+        $skipExport           = filter_var($input->getOption('skip-export'), FILTER_VALIDATE_BOOLEAN);
+        $skipContainerRestart = filter_var($input->getOption('skip-container-restart'), FILTER_VALIDATE_BOOLEAN);
 
         if (false === $this->isSupportedPHPMode($phpMode)) {
             throw new Exception('Unsupported PHP mode: '.$phpMode);
         }
 
-        $this->exportPHPConfigurations('php.ini', $output);
+        if (false === $skipExport) { // don't skip export.
+            $this->exportPHPConfigurations('php.ini', $output);
+        }
 
         $output->writeln(
             sprintf('Updating "%s" to "%s" for PHP mode %s', $phpVariableToUpdate, $phpValueToUpdate, $phpMode)
@@ -98,12 +118,14 @@ class SetCommand extends Command
 
         $this->restorePHPConfigurations('php.ini', $output);
 
-        $restartContainerCommand     = $this->getApplication()->find('container:restart');
-        $restartContainerCommandArgs = new ArrayInput(array(
-            'name' => 'devkinsta_nginx',
-        ));
+        if (false === $skipContainerRestart) { // don't skip container restart.
+            $restartContainerCommand     = $this->getApplication()->find('container:restart');
+            $restartContainerCommandArgs = new ArrayInput(array(
+                'name' => 'devkinsta_nginx',
+            ));
 
-        $restartContainerCommand->run($restartContainerCommandArgs, $output);
+            $restartContainerCommand->run($restartContainerCommandArgs, $output);
+        }
 
         return Command::SUCCESS;
     }
@@ -150,8 +172,6 @@ class SetCommand extends Command
         if (false === is_null($output)) {
             $output->writeln('DONE');
         }
-
-
     }
 
     private function maybeUncommentVariable(string $iniPath, string $variableName): void
