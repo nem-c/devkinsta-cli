@@ -8,6 +8,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -41,6 +42,14 @@ class MemoryLimitCommand extends Command
             InputArgument::REQUIRED,
             'New value to use for memory_limit. Should be in [int][M|G] format.'
         );
+
+        $this->addOption(
+            'mode',
+            null,
+            InputOption::VALUE_REQUIRED,
+            'PHP Mode to update PHP setting for',
+            'fpm'
+        );
     }
 
     /**
@@ -56,8 +65,9 @@ class MemoryLimitCommand extends Command
     {
         $phpSetCommand     = $this->getApplication()->find('php:set');
         $phpSetCommandArgs = new ArrayInput(array(
-            'variable' => 'memory_limit',
-            'value'    => strtolower(trim($input->getArgument('value'))),
+            'variable' => 'PHP.memory_limit',
+            'value'    => trim($input->getArgument('value')),
+            '--mode'   => strtolower(trim($input->getOption('mode'))),
         ));
 
         $phpSetCommand->run($phpSetCommandArgs, $output);

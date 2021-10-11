@@ -4,6 +4,7 @@ namespace DevKinsta\CLI\Traits;
 
 use DevKinsta\CLI\Services\DockerService;
 use Exception;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
@@ -47,6 +48,18 @@ trait DevKinstaPHPTrait
         return $this->supportedPhpModes;
     }
 
+    /**
+     * Is given mode supported PHP mode in DevKinsta_FPM php configurations.
+     *
+     * @param  string  $mode
+     *
+     * @return bool
+     */
+    public function isSupportedPHPMode(string $mode): bool
+    {
+        return in_array($mode, $this->supportedPhpModes, true);
+    }
+
     public function getPHPConfigPath(string $version, string $mode): string
     {
         return strtr($this->phpConfigPathTemplate, array(
@@ -62,8 +75,11 @@ trait DevKinstaPHPTrait
      * @return string[]
      * @throws Exception
      */
-    public function exportPHPConfigurations(string $filename = 'php.ini'): array
+    public function exportPHPConfigurations(string $filename = 'php.ini', OutputInterface $output = null): array
     {
+        if (false === is_null($output)) {
+            $output->write('Exporting current php.ini files ... ');
+        }
         $exportedFiles = array();
 
         foreach ($this->getSupportedPHPVersions() as $supportedPhpVersion) {
@@ -80,7 +96,47 @@ trait DevKinstaPHPTrait
             }
         }
 
+        if (false === is_null($output)) {
+            $output->writeln('DONE');
+        }
+
         return $exportedFiles;
+    }
+
+    /**
+     * Restore php configuration to /etc/php from /www/kinsta/private/.devkinsta-cli
+     * Restores configuration files available from parent machine to container.
+     *
+     * @return string[]
+     *
+     * @throws Exception
+     */
+    public function restorePHPConfigurations(string $filename = 'php.ini', OutputInterface $output = null): array
+    {
+        if (false === is_null($output)) {
+            $output->write('Restoring php.ini files ... ');
+        }
+
+        $restoredFiles = array();
+
+        foreach ($this->getSupportedPHPVersions() as $supportedPhpVersion) {
+            foreach ($this->getSupportedPHPModes() as $supportedPhpMode) {
+                $containerPhpPath = $this->getPHPConfigPath($supportedPhpVersion, $supportedPhpMode);
+
+                // fix path - remove duplicated slash.
+                $exportPath = str_replace('//', '/', $this->exportPath.$containerPhpPath);
+
+                $this->restorePHPConfiguration($containerPhpPath, $exportPath, $filename);
+
+                $restoredFiles[] = $containerPhpPath;
+            }
+        }
+
+        if (false === is_null($output)) {
+            $output->writeln('DONE');
+        }
+
+        return $restoredFiles;
     }
 
     /**
@@ -90,8 +146,9 @@ trait DevKinstaPHPTrait
      *
      * @throws Exception
      */
-    private function makeExportDir(string $exportPath): void
-    {
+    private function makeExportDir(
+        string $exportPath
+    ): void {
         $mkdirProcess = $this->createDockerProcess(array(
             'mkdir',
             '-p',
@@ -122,6 +179,34 @@ trait DevKinstaPHPTrait
             'cp',
             $containerPhpPath.$configName,
             $exportPath.$configName,
+            '-f',
+        ));
+
+        $copyProcess->run();
+
+        if (false === $copyProcess->isSuccessful()) {
+            throw new ProcessFailedException($copyProcess);
+        }
+    }
+
+    /**
+     * Restore PHP config file from export path to container path.
+     *
+     * @param  string  $containerPhpPath
+     * @param  string  $exportPath
+     * @param  string  $configName
+     *
+     * @throws Exception
+     */
+    private function restorePHPConfiguration(
+        string $containerPhpPath,
+        string $exportPath,
+        string $configName
+    ): void {
+        $copyProcess = $this->createDockerProcess(array(
+            'cp',
+            $exportPath.$configName,
+            $containerPhpPath.$configName,
             '-f',
         ));
 
